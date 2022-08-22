@@ -1,8 +1,10 @@
 const path = require('path')
 const pxToViewport = require('postcss-px-to-viewport')
+
 const vw = pxToViewport({
   viewportWidth: 375,
 })
+
 module.exports = {
   webpack: {
     alias: {
