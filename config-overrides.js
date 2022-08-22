@@ -1,10 +1,10 @@
 const {
-  addWebpackAlias,
   override,
   addPostcssPlugins,
+  addWebpackAlias,
 } = require('customize-cra')
-const px2viewport = require('postcss-px-to-viewport')
 const path = require('path')
+const px2viewport = require('postcss-px-to-viewport')
 
 const alias = addWebpackAlias({
   '@': path.join(__dirname, 'src'),
