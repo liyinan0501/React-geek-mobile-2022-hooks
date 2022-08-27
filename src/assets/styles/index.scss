@@ -54,6 +54,10 @@ input {
   border: 0;
   resize: none;
   color: #333;
+
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 textarea {
