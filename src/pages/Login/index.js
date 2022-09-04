@@ -4,11 +4,48 @@ import Input from '@/components/Input'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import classNames from 'classnames'
+import { useDispatch } from 'react-redux'
+import { sendValidationCode } from '@/store/actions/login'
+import { Toast } from 'antd-mobile'
+import { useState } from 'react'
 
 export default function Login() {
-  const onExtraClick = () => {
-    console.log('send')
+  const dispatch = useDispatch()
+  const [time, setTime] = useState(0)
+  const onExtraClick = async () => {
+    if (time > 0) return
+    if (!/^1[3-9]\d{9}$/.test(mobile)) {
+      formik.setTouched({
+        mobile: true,
+      })
+      return
+    }
+    try {
+      await dispatch(sendValidationCode(mobile))
+      Toast.show({
+        icon: 'success',
+        content: 'Sent',
+        maskClickable: false,
+      })
+      setTime(60)
+      let timeId = setInterval(() => {
+        // Get newest time from state using setTime((time)=>{})
+        setTime((time) => {
+          if (time === 1) {
+            clearInterval(timeId)
+          }
+          return time - 1
+        })
+      }, 1000)
+    } catch (err) {
+      Toast.show({
+        icon: 'fail',
+        content: err.response ? err.response.data.message : 'Server Busy',
+        maskClickable: false,
+      })
+    }
   }
+
   const formik = useFormik({
     initialValues: {
       mobile: '',
@@ -61,7 +98,7 @@ export default function Login() {
             <Input
               name="code"
               placeholder="Code"
-              extra="Send"
+              extra={time === 0 ? 'Send' : time + 's'}
               onExtraClick={onExtraClick}
               value={code}
               onChange={handleChange}
