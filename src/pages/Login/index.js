@@ -51,6 +51,7 @@ export default function Login() {
               onChange={handleChange}
               autoComplete="off"
               onBlur={handleBlur}
+              maxLength={11}
             />
             {touched.mobile && errors.mobile ? (
               <div className="validate">{errors.mobile}</div>
@@ -66,6 +67,7 @@ export default function Login() {
               onChange={handleChange}
               autoComplete="off"
               onBlur={handleBlur}
+              maxLength={6}
             />
             {touched.code && errors.code ? (
               <div className="validate">{errors.code}</div>
