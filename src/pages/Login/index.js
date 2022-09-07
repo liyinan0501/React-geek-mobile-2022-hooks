@@ -5,12 +5,15 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import classNames from 'classnames'
 import { useDispatch } from 'react-redux'
-import { sendValidationCode } from '@/store/actions/login'
+import { loginAction, sendValidationCode } from '@/store/actions/login'
 import { Toast } from 'antd-mobile'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const [time, setTime] = useState(0)
   const onExtraClick = async () => {
     if (time > 0) return
@@ -20,36 +23,28 @@ export default function Login() {
       })
       return
     }
-    try {
-      await dispatch(sendValidationCode(mobile))
-      Toast.show({
-        icon: 'success',
-        content: 'Sent',
-        maskClickable: false,
+    await dispatch(sendValidationCode(mobile))
+    Toast.show({
+      icon: 'success',
+      content: 'Sent',
+      maskClickable: false,
+    })
+    setTime(60)
+    let timeId = setInterval(() => {
+      // Get newest time from state using setTime((time)=>{})
+      setTime((time) => {
+        if (time === 1) {
+          clearInterval(timeId)
+        }
+        return time - 1
       })
-      setTime(60)
-      let timeId = setInterval(() => {
-        // Get newest time from state using setTime((time)=>{})
-        setTime((time) => {
-          if (time === 1) {
-            clearInterval(timeId)
-          }
-          return time - 1
-        })
-      }, 1000)
-    } catch (err) {
-      Toast.show({
-        icon: 'fail',
-        content: err.response ? err.response.data.message : 'Server Busy',
-        maskClickable: false,
-      })
-    }
+    }, 1000)
   }
 
   const formik = useFormik({
     initialValues: {
-      mobile: '',
-      code: '',
+      mobile: '13946003700',
+      code: '246810',
     },
     validationSchema: Yup.object({
       mobile: Yup.string()
@@ -60,8 +55,14 @@ export default function Login() {
         .matches(/^\d{6}$/, 'Not correct code'),
     }),
 
-    onSubmit(values) {
-      console.log(values)
+    async onSubmit(values) {
+      await dispatch(loginAction(values))
+      Toast.show({
+        icon: 'success',
+        content: 'Login Success!',
+        maskClickable: false,
+      })
+      navigate('/home', { replace: true })
     },
   })
   const {
