@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { setTokenInfo } from '@/utils/storage'
 
 export const sendValidationCode = (mobile) => {
   console.log(mobile)
@@ -24,6 +25,8 @@ export const loginAction = (data) => {
     })
     // Saving token to redux
     dispatch(saveTokenAction(res.data))
+    // Saving token to local storage
+    setTokenInfo(res.data)
   }
 }
 
