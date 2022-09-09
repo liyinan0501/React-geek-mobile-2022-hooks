@@ -1,14 +1,14 @@
-import React, { Suspense } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import './App.scss'
 
-const Login = React.lazy(() => import('@/pages/Login'))
-const Layout = React.lazy(() => import('@/pages/Layout'))
-const Home = React.lazy(() => import('@/pages/Home'))
-const Forum = React.lazy(() => import('@/pages/Forum'))
-const Video = React.lazy(() => import('@/pages/Video'))
-const Profile = React.lazy(() => import('@/pages/Profile'))
+const Login = lazy(() => import('@/pages/Login'))
+const Layout = lazy(() => import('@/pages/Layout'))
+const Home = lazy(() => import('@/pages/Home'))
+const Forum = lazy(() => import('@/pages/Forum'))
+const Video = lazy(() => import('@/pages/Video'))
+const Profile = lazy(() => import('@/pages/Profile'))
 
 export default function App() {
   return (
